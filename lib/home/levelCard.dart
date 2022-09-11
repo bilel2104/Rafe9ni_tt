@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:rafe9ni/cours/cours.dart';
 import 'package:rafe9ni/home/levelServices.dart';
 
 class LevelCard extends StatelessWidget {
   final String level;
   final String imageUrl;
+  final int digiref;
 
-  LevelCard({Key? key, required this.level, required this.imageUrl})
+  final int idStudent;
+  final int idBatch;
+
+  LevelCard(
+      {Key? key,
+      required this.level,
+      required this.imageUrl,
+      required this.digiref,
+      required this.idStudent,
+      required this.idBatch})
       : super(key: key);
   List levellllll = [];
 
@@ -29,10 +40,21 @@ class LevelCard extends StatelessWidget {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
-              ElevatedButton(onPressed: () {}, child: Text('start')),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Cours(
+                                  digiref: digiref,
+                                  idBatch: idBatch,
+                                  idStudent: idStudent,
+                                )));
+                  },
+                  child: Text('start')),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             width: 40,
           ),
           Center(

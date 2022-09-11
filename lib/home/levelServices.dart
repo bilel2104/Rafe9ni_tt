@@ -4,7 +4,8 @@ import 'package:rafe9ni/home/levelModel.dart';
 class LevelServices {
   Dio dio = Dio();
   List<Student> level = [];
-  Future fetchlevel(int idGardian, List le) async {
+
+  Future<List<Student>?> fetchlevel(int idGardian, List le) async {
     try {
       Response response = await dio.get(
         "http://51.38.199.214:2036/mobile/rafi9niplus/students/2203",
@@ -15,6 +16,7 @@ class LevelServices {
         le.add(Student.fromJson(response.data['students'][i]));
       }
       print(level);
+      return level;
     } on DioError catch (e) {
       print(e);
     }
