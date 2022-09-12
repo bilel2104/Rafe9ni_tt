@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rafe9ni/cours/coursServices.dart';
 import 'package:rafe9ni/series/serieServices.dart';
 
+import 'exTypes.dart';
+
 class Series extends StatefulWidget {
   final int batchid;
   final int idstudent;
@@ -44,7 +46,14 @@ class _SeriesState extends State<Series> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ExTypes(
+                                            idSeries: series[index].id,
+                                          )));
+                            },
                             icon: const Icon(
                               Icons.arrow_circle_left_outlined,
                               color: Colors.teal,

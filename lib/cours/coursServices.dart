@@ -9,11 +9,12 @@ class CoursServices {
       Response response = await dio.get(
         "http://51.38.199.214:2036/mobile/homeWork/course/$digiref",
       );
-      print(response.data);
-      for (int i = 0; i < response.data.length; i++) {
-        courss.add(Cours.fromJson(response.data[i]));
+      if (courss.isEmpty == true) {
+        for (int i = 0; i < response.data.length; i++) {
+          courss.add(Cours.fromJson(response.data[i]));
+        }
       }
-      print(courss);
+
       return courssss;
     } on DioError catch (e) {
       print(e);

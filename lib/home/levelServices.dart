@@ -10,12 +10,12 @@ class LevelServices {
       Response response = await dio.get(
         "http://51.38.199.214:2036/mobile/rafi9niplus/students/2203",
       );
-
-      print(response.data['students']);
-      for (int i = 0; i < response.data['students'].length; i++) {
-        le.add(Student.fromJson(response.data['students'][i]));
+      if (le.isEmpty == true) {
+        for (int i = 0; i < response.data['students'].length; i++) {
+          le.add(Student.fromJson(response.data['students'][i]));
+        }
       }
-      print(level);
+
       return level;
     } on DioError catch (e) {
       print(e);
