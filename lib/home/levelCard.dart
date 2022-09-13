@@ -27,7 +27,7 @@ class LevelCard extends StatelessWidget {
           color: Colors.amber, borderRadius: BorderRadius.circular(18)),
       height: MediaQuery.of(context).size.height * 0.3,
       width: MediaQuery.of(context).size.width * 0.9,
-      margin: const EdgeInsets.all(18),
+      margin: const EdgeInsets.only(top: 40, left: 20, right: 20),
       child: Row(
         children: [
           Column(

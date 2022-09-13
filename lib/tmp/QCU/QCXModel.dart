@@ -28,10 +28,10 @@ class QCX {
 }
 
 class PropsQCX {
-  String? label;
-  bool? value;
+  late String label;
+  late bool value;
 
-  PropsQCX({this.label, this.value});
+  PropsQCX({required this.label, required this.value});
 
   PropsQCX.fromJson(Map<String, dynamic> json) {
     label = json['label'];

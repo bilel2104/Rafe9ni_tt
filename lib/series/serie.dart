@@ -8,7 +8,7 @@ class Series extends StatefulWidget {
   final int batchid;
   final int idstudent;
   final int courseid;
-  Series(
+  const Series(
       {Key? key,
       required this.batchid,
       required this.idstudent,

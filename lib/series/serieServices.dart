@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:rafe9ni/tmp/Qcm/QCXModel.dart';
+import 'package:rafe9ni/series/seriesModel.dart';
+import 'package:rafe9ni/tmp/QCU/QCXModel.dart';
 
 import '../tmp/Darg&drop_image/dargAndDropModel.dart';
 
@@ -7,8 +8,13 @@ class SeriesServices {
   Dio dio = Dio();
   List<Series> seriess = [];
   List<TypeExercies> typess = [];
+
   Future<List<Series>?> fetchSeries(
-      int batchid, int idstudent, int courseid, List series) async {
+      //this function will fetch the series from the api
+      int batchid,
+      int idstudent,
+      int courseid,
+      List series) async {
     try {
       Response response = await dio.get(
         "http://51.38.199.214:2036/mobile/rafi9niplus/serie/$batchid/$idstudent/$courseid/1/5",
@@ -24,10 +30,11 @@ class SeriesServices {
     }
   }
 
-  Future<List<TypeExercies>?> fetchExercices(int idSeie, List typesEx) async {
+  Future<List<TypeExercies>?> fetchEx(int idSeie, List typesEx) async {
+    //this function will fetch the types of the exercises from the api
     try {
-      Response response =
-          await dio.get('http://51.38.199.214:2036/mobile/type/exercice/8639');
+      Response response = await dio
+          .get('http://51.38.199.214:2036/mobile/type/exercice/$idSeie');
       if (typesEx.isEmpty == true) {
         for (int i = 0; i < response.data.length; i++) {
           typesEx.add(TypeExercies.fromJson(response.data[i]));
@@ -41,12 +48,13 @@ class SeriesServices {
   }
 
   List<ItemModel> exercices = [];
-  Future<List<ItemModel>?> fetchExercicess(
+  Future<List<ItemModel>?> fetchExDrag(
       int idEx, int idSerie, List contentOfEx) async {
+    //  this function will fetch the content of the exercise Drag and drop from the api
     try {
-      Response response = await dio
-          .get("http://51.38.199.214:2036/mobile/exercice/details/69/8639");
-      print(response.data);
+      Response response = await dio.get(
+          "http://51.38.199.214:2036/mobile/exercice/details/$idEx/$idSerie");
+
       if (contentOfEx.isEmpty == true) {
         for (int i = 0; i < response.data['itemModel'].length; i++) {
           contentOfEx.add(ItemModel.fromJson(response.data['itemModel'][i]));
@@ -59,70 +67,23 @@ class SeriesServices {
     }
   }
 
-  List<QCX> qcu = [];
-  Future<List<QCX>?> fetchaqcu(int idEx, int idSerie, List contentOfqcu) async {
+  QCX qcxs = QCX();
+  List<PropsQCX> qcxsList = [];
+  Future<List<PropsQCX>?> fetchaqcu(
+      int idEx, int idSerie, List contentOfqcu) async {
+    //  this function will fetch the content of the exercise qcu from the api
     try {
-      Response response = await dio
-          .get("http://51.38.199.214:2036/mobile/exercice/detailsqcm/70/8639");
-      print(response.data);
+      Response response = await dio.get(
+          "http://51.38.199.214:2036/mobile/exercice/detailsqcm/$idEx/$idSerie");
       if (contentOfqcu.isEmpty == true) {
         for (int i = 0; i < response.data['propsQCX'].length; i++) {
-          contentOfqcu.add(QCX.fromJson(response.data['propsQCX'][i]));
+          contentOfqcu.add(PropsQCX.fromJson(response.data['propsQCX'][i]));
         }
       }
-      print('**************************');
-      print(contentOfqcu);
-      print('**************************');
-      return qcu;
+
+      return qcxsList;
     } on DioError catch (e) {
       print(e);
     }
-  }
-}
-
-class Series {
-  int? id;
-  String? matiere;
-  String? creationDate;
-  String? color;
-
-  Series({this.id, this.matiere, this.creationDate, this.color});
-
-  Series.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    matiere = json['matiere'];
-    creationDate = json['creationDate'];
-    color = json['color'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['matiere'] = this.matiere;
-    data['creationDate'] = this.creationDate;
-    data['color'] = this.color;
-    return data;
-  }
-}
-
-class TypeExercies {
-  int? idExercice;
-  String? enonce;
-  String? type;
-
-  TypeExercies({this.idExercice, this.enonce, this.type});
-
-  TypeExercies.fromJson(Map<String, dynamic> json) {
-    idExercice = json['idExercice'];
-    enonce = json['enonce'];
-    type = json['type'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['idExercice'] = this.idExercice;
-    data['enonce'] = this.enonce;
-    data['type'] = this.type;
-    return data;
   }
 }

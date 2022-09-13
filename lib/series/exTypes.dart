@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:rafe9ni/home/MainScreen.dart';
 import 'package:rafe9ni/series/serieServices.dart';
-import 'package:rafe9ni/tmp/Darg&drop_image/Test.dart';
+import 'package:rafe9ni/tmp/Darg&drop_image/Draganddrop.dart';
 import 'package:rafe9ni/tmp/Darg&drop_image/dargAndDropModel.dart';
-import 'package:rafe9ni/tmp/Qcm/QCXModel.dart';
-import 'package:rafe9ni/tmp/Qcm/qcu.dart';
+import 'package:rafe9ni/tmp/QCU/QCXModel.dart';
+import 'package:rafe9ni/tmp/QCU/qcu.dart';
 
 class ExTypes extends StatefulWidget {
   final int idSeries;
@@ -17,29 +17,37 @@ class ExTypes extends StatefulWidget {
 
 class _ExTypesState extends State<ExTypes> {
   //this function will navigate to the next page with the type of the exercise with switch case
-  Future pagee(String a) async {
-    switch (a) {
+
+  List<ItemModel> ExContetnet = [];
+  List<PropsQCX> qcuContetnet = [];
+  Future futureServicesProvider(String type, int idEX) async {
+    switch (type) {
       case 'qcm':
-        print('selketttttttttttttt ');
-        return SeriesServices().fetchExercicess(22, 33, ExContetnet);
+        return SeriesServices().fetchaqcu(idEX, widget.idSeries, qcuContetnet);
       case 'Drag and drop':
-        return SeriesServices().fetchaqcu(22, 33, ExContetnet);
+        return SeriesServices().fetchExDrag(idEX, widget.idSeries, ExContetnet);
+
+      default:
+        return null;
     }
   }
 
-  void navigateToEx(String exType) {
+  void navigateToEx(String exType, String enonce) {
+    //this function will navigate to the next page with the type of the exercise with switch case
     switch (exType) {
       case "Drag and drop":
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => HomePage1(itemsList: ExContetnet)));
+                builder: (context) =>
+                    HomePage1(itemsList: ExContetnet, title: enonce)));
         break;
       case "qcm":
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => QCU(qcuContetnet)));
+            MaterialPageRoute(builder: (context) => QCU(qcuContetnet, enonce)));
         break;
       case "3":
+        //test on the string and push the right page
         Navigator.pushNamed(context, '/ex3');
         break;
       case "4":
@@ -51,8 +59,6 @@ class _ExTypesState extends State<ExTypes> {
     }
   }
 
-  List<ItemModel> ExContetnet = [];
-  late QCX qcuContetnet;
   List types = [];
   @override
   Widget build(BuildContext context) {
@@ -60,7 +66,7 @@ class _ExTypesState extends State<ExTypes> {
       child: Scaffold(
         body: //this a future build to get the data from the api
             FutureBuilder(
-          future: SeriesServices().fetchExercices(22, types),
+          future: SeriesServices().fetchEx(widget.idSeries, types),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               return //here we put the data from the api in a grid view
@@ -94,16 +100,14 @@ class _ExTypesState extends State<ExTypes> {
                             fontWeight: FontWeight.bold),
                       ),
                       FutureBuilder(
-                        future: pagee(types[index].type),
+                        future: futureServicesProvider(
+                            types[index].type, types[index].idExercice),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return IconButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => HomePage1(
-                                              itemsList: ExContetnet)));
+                                  navigateToEx(
+                                      types[index].type, types[index].enonce);
                                 },
                                 icon: const Icon(
                                   Icons.arrow_circle_left_outlined,
